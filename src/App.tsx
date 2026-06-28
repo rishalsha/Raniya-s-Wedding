@@ -25,13 +25,6 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  // Audio state
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audio] = useState(() => {
-    const a = new Audio("https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-2436.mp3");
-    a.loop = true;
-    return a;
-  });
 
   // Copied address state
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -70,42 +63,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Sync play/pause state with audio element
-  useEffect(() => {
-    if (isPlaying) {
-      audio.play().catch(() => {
-        setIsPlaying(false);
-      });
-    } else {
-      audio.pause();
-    }
-  }, [isPlaying, audio]);
-
-  // Try to start music on first user interaction to bypass browser autoplay blocks
-  useEffect(() => {
-    const handleFirstInteraction = () => {
-      if (!isPlaying) {
-        setIsPlaying(true);
-      }
-      window.removeEventListener("click", handleFirstInteraction);
-      window.removeEventListener("touchstart", handleFirstInteraction);
-    };
-
-    window.addEventListener("click", handleFirstInteraction);
-    window.addEventListener("touchstart", handleFirstInteraction);
-
-    return () => {
-      window.removeEventListener("click", handleFirstInteraction);
-      window.removeEventListener("touchstart", handleFirstInteraction);
-    };
-  }, [isPlaying]);
-
-  // Clean up audio on unmount
-  useEffect(() => {
-    return () => {
-      audio.pause();
-    };
-  }, [audio]);
 
   // Canvas confetti effect for RSVPs
   useEffect(() => {
@@ -233,7 +190,7 @@ export default function App() {
       } catch (formattedError) {
         // Log formatted error details
       }
-      alert("Could not save your response. Please try again.");
+      alert("Could not save your response. Details: " + (error instanceof Error ? error.message : String(error)));
     } finally {
       setIsSubmitting(false);
     }
@@ -303,7 +260,7 @@ export default function App() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
-            className="pb-24 pt-12 px-4 max-w-4xl mx-auto flex flex-col items-center"
+            className="w-full pb-24 pt-12 px-4 max-w-4xl mx-auto flex flex-col items-center"
           >
             {/* Header Ornament decoration */}
             <div className="flex flex-col items-center text-center space-y-4 mb-8 w-full max-w-2xl">
@@ -777,25 +734,6 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Floating Audio Play/Pause Control Button */}
-      <motion.button
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1 }}
-        onClick={() => setIsPlaying(!isPlaying)}
-        className="fixed bottom-6 right-6 z-50 p-4 bg-white/80 hover:bg-white border border-[#EAE3D5] rounded-full text-[#8B754E] hover:text-[#2C2925] shadow-lg backdrop-blur-md transition-all duration-300 active:scale-95 flex items-center justify-center group"
-        aria-label="Toggle background music"
-      >
-        {isPlaying ? (
-          <div className="relative flex items-center justify-center">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-[#D4AF37]/20 animate-ping" />
-            <Volume2 className="w-5 h-5 relative group-hover:scale-110 transition-transform" />
-          </div>
-        ) : (
-          <VolumeX className="w-5 h-5 group-hover:scale-110 transition-transform" />
-        )}
-      </motion.button>
 
       {/* Lightweight canvas confetti for RSVP 'Yes' submission */}
       <canvas id="confetti-canvas" className="fixed inset-0 pointer-events-none z-50 w-full h-full" />

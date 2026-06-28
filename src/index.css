@@ -26,10 +26,3 @@ body::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
 
-/* Zoom in slightly on mobile devices by scaling root font size */
-@media (max-width: 640px) {
-  html {
-    font-size: 18px; /* Increases size of all rem-based typography, padding, and spacing */
-  }
-}
-
