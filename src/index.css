@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", sans-serif;
+  --font-cinzel: "Cinzel", serif;
+  --font-arabic: "Amiri", serif;
+}
+
+@layer utilities {
+  .bg-cream-gold {
+    background: linear-gradient(135deg, #FAF8F2 0%, #FFFDF9 100%);
+  }
+}
+
+/* Hide scrollbar for all browsers while maintaining scrollability */
+html, body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  overflow-x: hidden; /* Prevent horizontal scrollbars during animations */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Zoom in slightly on mobile devices by scaling root font size */
+@media (max-width: 640px) {
+  html {
+    font-size: 18px; /* Increases size of all rem-based typography, padding, and spacing */
+  }
+}
+

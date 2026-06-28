@@ -1,0 +1,6 @@
+{
+  "name": "Digital Wedding Invitation",
+  "description": "An elegant, Islamic-themed digital wedding invitation for Raniya Parveen and Ismail, featuring RSVP tracking and a Bismillah intro.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

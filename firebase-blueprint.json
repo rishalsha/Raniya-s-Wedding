@@ -1,0 +1,27 @@
+{
+  "entities": {
+    "RSVP": {
+      "title": "RSVP",
+      "description": "An individual response to the wedding invitation",
+      "type": "object",
+      "properties": {
+        "attending": {
+          "type": "boolean",
+          "description": "Whether the guest is attending the wedding"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the response was submitted"
+        }
+      },
+      "required": ["attending", "createdAt"]
+    }
+  },
+  "firestore": {
+    "rsvps/{rsvpId}": {
+      "schema": "RSVP",
+      "description": "Collection of wedding invitation responses"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net - default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidRSVP(data) {
+      return data.keys().hasAll(['attending', 'createdAt'])
+        && data.keys().size() == 2
+        && data.attending is bool
+        && data.createdAt == request.time;
+    }
+
+    // RSVPs Collection rules
+    match /rsvps/{rsvpId} {
+      // Allow creation of a valid RSVP
+      allow create: if isValidId(rsvpId) && isValidRSVP(incoming());
+      
+      // Allow public listing so clients can compute total counts
+      allow list: if true;
+      
+      // Explicitly block individual reads, updates, and deletes to prevent scraping or tampering
+      allow get, update, delete: if false;
+    }
+  }
+}
